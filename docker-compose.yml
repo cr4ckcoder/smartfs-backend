@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: smartfs-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+
+  db:
+    image: postgres:16
+    container_name: smartfs-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-smartfs}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-smartfs}
+      POSTGRES_DB: ${POSTGRES_DB:-smartfs}
+    ports:
+      - "5432:5432"
+    volumes:
+      - smartfs_pgdata:/var/lib/postgresql/data
+
+volumes:
+  smartfs_pgdata:
